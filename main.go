@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/gorilla/mux"
 	"gopkg.in/mgo.v2"
@@ -31,7 +32,7 @@ func main() {
 	algorithmRouter.MakeRouter()
 
 	fmt.Println("Starting Server")
-	log.Fatal(http.ListenAndServe(":3000", router))
+	log.Fatal(http.ListenAndServe(":"+os.Args[1], router))
 }
 
 func mrHappy(w http.ResponseWriter, r *http.Request) {
