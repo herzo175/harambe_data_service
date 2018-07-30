@@ -31,6 +31,10 @@ func main() {
 	algorithmRouter := routers.AlgorithmRouter{Router: router, Schema: algorithmSchema}
 	algorithmRouter.MakeRouter()
 
+	userSchema := schemas.UserSchema{Session: session}
+	userRouter := routers.UserRouter{Router: router, Schema: userSchema}
+	userRouter.MakeRouter()
+
 	fmt.Println("Starting Server")
 	log.Fatal(http.ListenAndServe(":"+os.Args[1], router))
 }
