@@ -1,15 +1,9 @@
 package schemas
 
 import (
-	"fmt"
-
 	"../../config"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
-)
-
-const (
-	collectionName = "Algorithms"
 )
 
 type Security struct {
@@ -27,7 +21,8 @@ type Algorithm struct {
 	TrendStrength           int           `json:"trend_strength" bson:"trend_strength,omitempty"`
 	RateOfChange            int           `json:"rate_of_change" bson:"rate_of_change,omitempty"`
 	Volatility              int           `json:"volatility" bson:"volatility,omitempty"`
-	Securities              []Security    `json:"securities" bson:"securities,omitempty"`
+	SecurityIds             []string      `json:"security_ids" bson:"security_ids,omitempty"`
+	UserId                  string        `json:"user_id" bson:"user_id,omitempty"`
 }
 
 type AlgorithmSchema struct {
@@ -35,7 +30,7 @@ type AlgorithmSchema struct {
 }
 
 func (s *AlgorithmSchema) GetCollection() *mgo.Collection {
-	return s.Session.DB(config.DBName).C(collectionName)
+	return s.Session.DB(config.DBName).C("Algorithms")
 }
 
 // TODO: paginated list
@@ -75,7 +70,6 @@ func (s *AlgorithmSchema) Update(id string, updateAlgorithm *Algorithm) error {
 	collection := s.GetCollection()
 
 	colQuerier := bson.M{"_id": bson.ObjectIdHex(id)}
-	fmt.Println(updateAlgorithm)
 	change := bson.M{"$set": updateAlgorithm}
 
 	return collection.Update(colQuerier, change)
