@@ -34,11 +34,12 @@ func (s *AlgorithmSchema) GetCollection() *mgo.Collection {
 }
 
 // TODO: paginated list
-func (s *AlgorithmSchema) GetAll() ([]Algorithm, error) {
+// TODO: query strings
+func (s *AlgorithmSchema) GetAll(query interface{}) ([]Algorithm, error) {
 	collection := s.GetCollection()
 
 	result := []Algorithm{}
-	err := collection.Find(bson.M{}).All(&result)
+	err := collection.Find(query).All(&result)
 
 	if err != nil {
 		return result, err

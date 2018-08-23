@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"../schemas"
+	"../util"
 	"github.com/gorilla/mux"
 )
 
@@ -23,8 +24,8 @@ func (ur *UserRouter) MakeRouter() {
 	subrouter.HandleFunc("/{id}", ur.Update).Methods("PUT", "PATCH")
 }
 
-func (ar *UserRouter) GetAll(w http.ResponseWriter, r *http.Request) {
-	users, err := ar.Schema.GetAll()
+func (ur *UserRouter) GetAll(w http.ResponseWriter, r *http.Request) {
+	users, err := ur.Schema.GetAll(util.GenerateQueryFromURLQuery(r.URL.Query(), schemas.Algorithm{}))
 
 	if err != nil {
 		http.Error(w, err.Error(), 400)
@@ -42,9 +43,9 @@ func (ar *UserRouter) GetAll(w http.ResponseWriter, r *http.Request) {
 	w.Write(data)
 }
 
-func (ar *UserRouter) GetById(w http.ResponseWriter, r *http.Request) {
+func (ur *UserRouter) GetById(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
-	user, err := ar.Schema.GetById(params["id"])
+	user, err := ur.Schema.GetById(params["id"])
 
 	if err != nil {
 		http.Error(w, err.Error(), 400)
@@ -65,7 +66,7 @@ func (ar *UserRouter) GetById(w http.ResponseWriter, r *http.Request) {
 	w.Write(data)
 }
 
-func (ar *UserRouter) Create(w http.ResponseWriter, r *http.Request) {
+func (ur *UserRouter) Create(w http.ResponseWriter, r *http.Request) {
 	decoder := json.NewDecoder(r.Body)
 	var body schemas.User
 	err := decoder.Decode(&body)
@@ -76,7 +77,7 @@ func (ar *UserRouter) Create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = ar.Schema.Create(&body)
+	err = ur.Schema.Create(&body)
 
 	if err != nil {
 		http.Error(w, err.Error(), 400)
@@ -85,7 +86,7 @@ func (ar *UserRouter) Create(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (ar *UserRouter) Update(w http.ResponseWriter, r *http.Request) {
+func (ur *UserRouter) Update(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	decoder := json.NewDecoder(r.Body)
 	var body schemas.User
@@ -97,7 +98,7 @@ func (ar *UserRouter) Update(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = ar.Schema.Update(params["id"], &body)
+	err = ur.Schema.Update(params["id"], &body)
 
 	if err != nil {
 		http.Error(w, err.Error(), 400)

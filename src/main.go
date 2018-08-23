@@ -10,9 +10,9 @@ import (
 	"github.com/gorilla/mux"
 	"gopkg.in/mgo.v2"
 
-	"./config"
-	"./src/routers"
-	"./src/schemas"
+	"../config"
+	"./routers"
+	"./schemas"
 )
 
 func main() {
@@ -35,8 +35,9 @@ func main() {
 	userRouter := routers.UserRouter{Router: router, Schema: userSchema}
 	userRouter.MakeRouter()
 
-	fmt.Println("Starting Server")
-	log.Fatal(http.ListenAndServe(":"+os.Args[1], router))
+	port := os.Args[1]
+	fmt.Println("Starting data service on port " + port)
+	log.Fatal(http.ListenAndServe(":"+port, router))
 }
 
 func mrHappy(w http.ResponseWriter, r *http.Request) {
