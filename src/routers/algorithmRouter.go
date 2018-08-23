@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"../schemas"
+	"../util"
 	"github.com/gorilla/mux"
 )
 
@@ -24,7 +25,7 @@ func (ar *AlgorithmRouter) MakeRouter() {
 }
 
 func (ar *AlgorithmRouter) GetAll(w http.ResponseWriter, r *http.Request) {
-	algorithms, err := ar.Schema.GetAll()
+	algorithms, err := ar.Schema.GetAll(util.GenerateQueryFromURLQuery(r.URL.Query(), schemas.Algorithm{}))
 
 	if err != nil {
 		http.Error(w, err.Error(), 400)

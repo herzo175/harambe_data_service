@@ -3,7 +3,7 @@ VERSION=$(shell git rev-parse HEAD)
 DEFAULT_PORT=3000
 
 compile:
-	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o bin/harambe_data_service
+	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o bin/harambe_data_service ./src
 
 build:
 	docker build --build-arg PORT_ARG=$(DEFAULT_PORT) -t $(NAME)/$(VERSION) ./
