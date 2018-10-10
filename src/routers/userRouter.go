@@ -29,7 +29,8 @@ func (ur *UserRouter) GetAll(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		http.Error(w, err.Error(), 400)
-		panic(err)
+		fmt.Println("UserRouter.Create " + err.Error())
+		return
 	}
 
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
@@ -37,7 +38,8 @@ func (ur *UserRouter) GetAll(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		http.Error(w, err.Error(), 500)
-		panic(err)
+		fmt.Println("UserRouter.Create " + err.Error())
+		return
 	}
 
 	w.Write(data)
@@ -84,6 +86,17 @@ func (ur *UserRouter) Create(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("UserRouter.Create " + err.Error())
 		return
 	}
+
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	data, err := json.Marshal(body)
+
+	if err != nil {
+		http.Error(w, err.Error(), 500)
+		fmt.Println("UserRouter.Create " + err.Error())
+		return
+	}
+
+	w.Write(data)
 }
 
 func (ur *UserRouter) Update(w http.ResponseWriter, r *http.Request) {
@@ -105,4 +118,15 @@ func (ur *UserRouter) Update(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("UserRouter.Update " + err.Error() + " " + params["id"])
 		return
 	}
+
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	data, err := json.Marshal(body)
+
+	if err != nil {
+		http.Error(w, err.Error(), 500)
+		fmt.Println("UserRouter.Update " + err.Error())
+		return
+	}
+
+	w.Write(data)
 }

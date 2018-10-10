@@ -81,6 +81,7 @@ func (s *UserSchema) GetById(id string) (User, error) {
 
 func (s *UserSchema) Create(newUser *User) error {
 	collection := s.GetCollection()
+	newUser.Id = bson.NewObjectId()
 
 	return collection.Insert(newUser)
 }
@@ -88,10 +89,10 @@ func (s *UserSchema) Create(newUser *User) error {
 func (s *UserSchema) Update(id string, updateUser *User) error {
 	collection := s.GetCollection()
 
-	colQuerier := bson.M{"_id": bson.ObjectIdHex(id)}
+	query := bson.M{"_id": bson.ObjectIdHex(id)}
 	change := bson.M{"$set": updateUser}
 
-	return collection.Update(colQuerier, change)
+	return collection.Update(query, change)
 }
 
 // TODO: delete?

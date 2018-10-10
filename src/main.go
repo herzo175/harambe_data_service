@@ -15,6 +15,7 @@ import (
 	"./schemas"
 )
 
+// TODO: ADD AUTH THROUGH WITH IDENTITY SERVICE AND BEARER TOKENS!!!!!
 func main() {
 	session, err := mgo.Dial(config.DBConnectionString)
 
@@ -27,13 +28,21 @@ func main() {
 	// register routes
 	router.HandleFunc("/up", mrHappy).Methods("GET")
 
-	algorithmSchema := schemas.AlgorithmSchema{Session: session}
-	algorithmRouter := routers.AlgorithmRouter{Router: router, Schema: algorithmSchema}
-	algorithmRouter.MakeRouter()
+	// algorithmSchema := schemas.AlgorithmSchema{Session: session}
+	// algorithmRouter := routers.AlgorithmRouter{Router: router, Schema: algorithmSchema}
+	// algorithmRouter.MakeRouter()
 
 	userSchema := schemas.UserSchema{Session: session}
 	userRouter := routers.UserRouter{Router: router, Schema: userSchema}
 	userRouter.MakeRouter()
+
+	brokerSchema := schemas.BrokerSchema{Session: session}
+	brokerRouter := routers.BrokerRouter{Router: router, Schema: brokerSchema}
+	brokerRouter.MakeRouter()
+
+	reportSchema := schemas.ReportSchema{Session: session}
+	reportRouter := routers.ReportRouter{Router: router, Schema: reportSchema}
+	reportRouter.MakeRouter()
 
 	port := os.Args[1]
 	fmt.Println("Starting data service on port " + port)
